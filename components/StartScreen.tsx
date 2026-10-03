@@ -5,7 +5,7 @@ import { Sprite } from "./Sprite";
 
 export const NAME_RE = /^[\p{L}\s.'-]{3,60}$/u;
 export const NIM_RE = /^\d{8,15}$/;
-export const KELAS_RE = /^[A-Z0-9]{1,6}(-[A-Z0-9]{1,6}){1,2}$/;
+export const KELAS = ["25-01", "25-02", "25-03", "25-04", "25-05", "25-06"];
 
 type Props = { attempt: number; onStart: (nama: string, nim: string, kelas: string) => void };
 
@@ -62,7 +62,7 @@ export function StartScreen({ attempt, onStart }: Props) {
   const [kelas, setKelas] = useState("");
   const namaOk = NAME_RE.test(nama.trim());
   const nimOk = NIM_RE.test(nim);
-  const kelasOk = KELAS_RE.test(kelas);
+  const kelasOk = KELAS.includes(kelas);
   const ok = namaOk && nimOk && kelasOk;
 
   function submit(e: FormEvent) {
@@ -136,16 +136,26 @@ export function StartScreen({ attempt, onStart }: Props) {
             mono
             maxLength={15}
           />
-          <Field
-            id="kelas"
-            label="KELAS"
-            value={kelas}
-            onChange={(v) => setKelas(v.toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 14))}
-            error={kelas !== "" && !kelasOk && "Format kelas seperti 25-02."}
-            placeholder="25-02"
-            mono
-            maxLength={14}
-          />
+          <label className="flex flex-col gap-1.5" htmlFor="kelas">
+            <span className="font-pixel text-[10px] tracking-wider text-dim">KELAS</span>
+            <select
+              id="kelas"
+              className="px-input px-3 py-2 font-code text-[18px] text-bone"
+              value={kelas}
+              onChange={(e) => setKelas(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Pilih kelas…
+              </option>
+              {KELAS.map((k) => (
+                <option key={k} value={k}>
+                  {k}
+                </option>
+              ))}
+            </select>
+            <span className="min-h-5" />
+          </label>
 
           {attempt > 1 && (
             <p className="border-l-4 border-torch bg-torch/10 px-3 py-2 text-[19px] text-torch">
@@ -164,9 +174,6 @@ export function StartScreen({ attempt, onStart }: Props) {
         </form>
       </div>
 
-      <p className="text-center text-[16px] text-dim/60">
-        Sprite: 0x72 DungeonTileset II · OpenGameArt (CC0) · Praktikum Struktur Data
-      </p>
     </main>
   );
 }
