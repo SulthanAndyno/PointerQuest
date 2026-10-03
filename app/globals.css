@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stone-950: #120f19;
+  --color-stone: #1a1625;
+  --color-stone-2: #241e33;
+  --color-stone-3: #2f2742;
+  --color-bone: #efe6d2;
+  --color-dim: #b5a9c9;
+  --color-torch: #ff9f3a;
+  --color-ember: #ffcf5a;
+  --color-ok: #4ade80;
+  --color-bad: #f87171;
+  --color-arcane: #b98cff;
+  --color-gold: #ffd54a;
+  --color-ice: #7cc4ff;
+  --font-pixel: var(--font-press), monospace;
+  --font-vt: var(--font-vt323), monospace;
+  --font-code: var(--font-jet), monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+/* tanpa ligatur: `==` dan `->` harus terlihat apa adanya di soal */
+.font-code,
+code,
+pre {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+body {
+  background-color: var(--color-stone-950);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgb(255 159 58 / 0.12), transparent 60%),
+    linear-gradient(rgb(18 15 25 / 0.82), rgb(18 15 25 / 0.92)),
+    url("/sprites/floor_tile.png");
+  background-size: auto, auto, 192px 192px;
+  background-attachment: fixed;
+  image-rendering: pixelated;
+  color: var(--color-bone);
+  font-family: var(--font-vt);
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+/* panel bergaya pixel: border tebal bertingkat tanpa sudut bulat */
+.px-panel {
+  background: var(--color-stone);
+  box-shadow:
+    0 0 0 3px #0a0810,
+    0 0 0 6px var(--color-stone-3),
+    0 0 0 9px #0a0810,
+    0 10px 0 9px rgb(0 0 0 / 0.45);
+}
+
+.px-btn {
+  position: relative;
+  background: var(--color-stone-2);
+  box-shadow:
+    inset -3px -3px 0 #0a0810,
+    inset 3px 3px 0 var(--color-stone-3),
+    0 0 0 3px #0a0810;
+  transition: transform 80ms, background-color 120ms;
+}
+.px-btn:hover:not(:disabled) {
+  background: var(--color-stone-3);
+}
+.px-btn:active:not(:disabled) {
+  transform: translateY(2px);
+}
+.px-btn:focus-visible,
+.px-input:focus-visible {
+  outline: 3px solid var(--color-ember);
+  outline-offset: 4px;
+}
+.px-btn:disabled {
+  cursor: not-allowed;
+}
+
+.px-input {
+  background: #0d0b13;
+  box-shadow: inset 3px 3px 0 #000, 0 0 0 3px var(--color-stone-3);
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+/* plakat judul: label emas 9-slice (Parchment GUI, CC0) */
+.plaque {
+  display: inline-block;
+  border-style: solid;
+  border-width: 9px 36px;
+  border-image-source: url("/sprites/label_gold.png");
+  border-image-slice: 3 12 3 12 fill;
+  border-image-width: 9px 36px;
+  image-rendering: pixelated;
+  padding: 4px 4px 2px;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  color: var(--color-ember);
+  text-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
+}
+
+/* gulungan quest: dua batang kayu + perkamen bertepi sobek */
+.scroll {
+  --ink: #3b2a17;
+  --ink-red: #8f2d1a;
+  padding-inline: 18px;
+  filter: drop-shadow(0 10px 0 rgb(0 0 0 / 0.4));
+}
+.scroll-rod {
+  position: relative;
+  height: 18px;
+  margin-inline: -18px;
+  background: linear-gradient(
+    #24150b 0 3px,
+    #5e3b20 3px 6px,
+    #93643a 6px 9px,
+    #74492a 9px 12px,
+    #4a2d17 12px 15px,
+    #24150b 15px
+  );
+  z-index: 1;
+}
+.scroll-rod::before,
+.scroll-rod::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  width: 12px;
+  height: 28px;
+  background: linear-gradient(90deg, #3d2608 0 3px, #b8862f 3px 6px, #f1cf73 6px 9px, #3d2608 9px);
+  box-shadow: 0 -3px 0 -0px #3d2608 inset, 0 3px 0 0 #3d2608 inset;
+}
+.scroll-rod::before { left: -10px; }
+.scroll-rod::after { right: -10px; }
+.scroll-paper {
+  color: var(--ink);
+  background-color: #e6d1a1;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' shape-rendering='crispEdges'%3E%3Crect x='2' y='3' width='1' height='1' fill='%23c4a66e'/%3E%3Crect x='9' y='8' width='1' height='1' fill='%23cdb17c'/%3E%3Crect x='6' y='10' width='1' height='1' fill='%23d6bd8a'/%3E%3Crect x='10' y='1' width='1' height='1' fill='%23c9ab74'/%3E%3C/svg%3E"),
+    linear-gradient(90deg, #b9965c 0 4px, #d4bb86 4px 10px, transparent 10px calc(100% - 10px), #d4bb86 calc(100% - 10px) calc(100% - 4px), #b9965c calc(100% - 4px)),
+    linear-gradient(#cdb27a, transparent 22px, transparent calc(100% - 22px), #cdb27a);
+  background-size: 24px 24px, auto, auto;
+  /* tepi kiri/kanan bergerigi seperti kertas tua */
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% 12%, calc(100% - 3px) 14%, 100% 17%,
+    100% 46%, calc(100% - 4px) 49%, 100% 52%,
+    100% 78%, calc(100% - 3px) 81%, 100% 84%,
+    100% 100%, 0 100%,
+    0 88%, 3px 85%, 0 82%,
+    0 58%, 4px 55%, 0 52%,
+    0 24%, 3px 21%, 0 18%
+  );
+}
+.ink-red { color: var(--ink-red); }
+
+/* animasi sprite strip: --sw = jarak geser total setelah diskala */
+@keyframes sprite {
+  to {
+    background-position-x: calc(-1 * var(--sw));
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(-2deg); }
+  30% { opacity: 0.85; transform: scale(1.06, 0.95) rotate(2deg); }
+  60% { opacity: 0.95; transform: scale(0.96, 1.05) rotate(-1deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-8px, 2px); }
+  40% { transform: translate(7px, -3px); }
+  60% { transform: translate(-5px, 1px); }
+  80% { transform: translate(4px, -1px); }
+}
+
+@keyframes blink {
+  50% { opacity: 0.35; }
+}
+
+@keyframes pulse-heart {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.45); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes poof {
+  to { opacity: 0; transform: scale(1.4) translateY(-10px); filter: brightness(3); }
+}
+
+@keyframes confetti {
+  from { transform: translateY(-10vh) rotate(0deg); }
+  to { transform: translateY(110vh) rotate(720deg); }
+}
+
+@keyframes glint {
+  0%, 70%, 100% { filter: brightness(1); }
+  80% { filter: brightness(2.2) drop-shadow(0 0 8px var(--color-gold)); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+
+@keyframes fade-dark {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.anim-flicker { animation: flicker 0.9s ease-in-out infinite; transform-origin: 50% 100%; }
+.anim-shake { animation: shake 0.45s linear; }
+.anim-blink { animation: blink 0.5s steps(2) infinite; }
+.anim-heart { animation: pulse-heart 0.5s ease-out 2; }
+.anim-rise { animation: rise 0.35s ease-out both; }
+.anim-poof { animation: poof 0.5s ease-in forwards; }
+.anim-glint { animation: glint 2.2s ease-in-out infinite; }
+.anim-wobble { animation: wobble 1.4s ease-in-out infinite; }
+.anim-fade-dark { animation: fade-dark 1.2s ease-out both; }
+
+.confetti {
+  position: fixed;
+  top: 0;
+  width: 8px;
+  height: 12px;
+  z-index: 5; /* di belakang kartu skor supaya kode verifikasi tetap terbaca di SS */
+  pointer-events: none;
+  animation: confetti linear infinite;
+}
+
+/* Mode Gelap: vignette tebal; kartu soal di atasnya (z-30) tetap terang */
+.dark-vignette {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: radial-gradient(ellipse at 50% 65%, transparent 22%, rgb(0 0 0 / 0.9) 70%);
+  animation: fade-dark 1s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .sprite { animation: none !important; }
+  .confetti { display: none; }
+}
