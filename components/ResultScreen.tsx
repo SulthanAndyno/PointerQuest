@@ -115,9 +115,7 @@ export function ResultScreen({ session, muted, onToggleMute, onReplay }: Props) 
     }
   }
 
-  function replay() {
-    if (window.confirm(`Percobaan berikutnya akan tercatat sebagai Percobaan ke-${session.attempt + 1}. Lanjut?`)) onReplay();
-  }
+  const confirmRef = useRef<HTMLDialogElement>(null);
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col items-center justify-center-safe gap-3 px-4 py-2">
@@ -235,7 +233,7 @@ export function ResultScreen({ session, muted, onToggleMute, onReplay }: Props) 
           <PixelIcon name="download" size={14} />
           {saving === "busy" ? "MENYIMPAN…" : "SIMPAN HASIL"}
         </button>
-        <button type="button" onClick={replay} className="px-btn flex items-center gap-2 px-4 py-3 font-pixel text-[10px] text-ember">
+        <button type="button" onClick={() => confirmRef.current?.showModal()} className="px-btn flex items-center gap-2 px-4 py-3 font-pixel text-[10px] text-ember">
           <PixelIcon name="replay" size={14} />
           MAIN LAGI
         </button>
@@ -254,6 +252,50 @@ export function ResultScreen({ session, muted, onToggleMute, onReplay }: Props) 
           Gagal menyimpan gambar. Screenshot kartu ini saja, ya.
         </p>
       )}
+      {/* konfirmasi main lagi (pengganti window.confirm) */}
+      <dialog
+        ref={confirmRef}
+        aria-labelledby="replay-title"
+        className="px-panel m-auto w-[min(92vw,460px)] p-0 text-bone backdrop:bg-black/75 backdrop:backdrop-blur-[2px]"
+        onClick={(e) => e.target === e.currentTarget && confirmRef.current?.close()}
+      >
+        <div className="flex flex-col items-center gap-4 p-6 text-center">
+          <div className="flex items-end gap-4" aria-hidden>
+            <Sprite name="torch" scale={3} fps={9} />
+            <Sprite name="doorClosed" scale={3} />
+            <Sprite name="torch" scale={3} fps={9} style={{ animationDelay: "-0.3s" }} />
+          </div>
+          <h2 id="replay-title" className="plaque">
+            MASUK DUNGEON LAGI?
+          </h2>
+          <p className="text-[20px] leading-snug">
+            Perjalanan baru akan tercatat sebagai <b className="whitespace-nowrap text-torch">Percobaan ke-{session.attempt + 1}</b>. Kartu
+            skor ini akan hilang dari layar.
+          </p>
+          <p className="text-[18px] text-dim">Sudah klik SIMPAN HASIL? Simpan dulu sebelum mengulang.</p>
+          <div className="mt-1 flex w-full flex-wrap justify-center gap-4">
+            <button
+              type="button"
+              autoFocus
+              onClick={() => confirmRef.current?.close()}
+              className="px-btn px-5 py-3 font-pixel text-[10px] text-bone"
+            >
+              BATAL
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                confirmRef.current?.close();
+                onReplay();
+              }}
+              className="px-btn flex items-center gap-2 px-5 py-3 font-pixel text-[10px] text-ember"
+            >
+              <PixelIcon name="replay" size={14} />
+              YA, ULANGI
+            </button>
+          </div>
+        </div>
+      </dialog>
     </main>
   );
 }
