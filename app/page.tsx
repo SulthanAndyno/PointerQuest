@@ -1,3 +1,5 @@
+/page/ 
+
 "use client";
 
 import { useCallback, useEffect, useReducer, useState } from "react";
